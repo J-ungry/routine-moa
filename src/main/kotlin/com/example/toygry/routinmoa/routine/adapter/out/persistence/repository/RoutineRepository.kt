@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 interface RoutineRepository: JpaRepository<RoutineEntity, Long> {
+
+    fun getAllByUserId(userId: Long): List<RoutineEntity>
 }
