@@ -6,10 +6,11 @@ import com.example.toygry.routinmoa.routine.domain.entity.Routine
 import org.springframework.stereotype.Component
 
 @Component
-class GetRoutineAdapter(
+class RoutineGetAdapter(
     val routineRepository: RoutineRepository
 ): GetRoutinePort {
     override fun getRoutine(userId: Long): List<Routine> {
+        // TODO 삭제상태 아닌거만 가져오기
         return routineRepository.getAllByUserId(userId)
             .map {it.toDomain()}
     }

@@ -17,31 +17,31 @@ class RoutineEntity (
     val user: UserEntity = UserEntity(),
 
     @Column
-    val name: String = "",
+    var name: String = "",
 
     @Column
-    val startDate: LocalDateTime = LocalDateTime.now(),
+    var startDate: LocalDateTime = LocalDateTime.now(),
 
     @Column
-    val endDate: LocalDateTime = LocalDateTime.now(),
+    var endDate: LocalDateTime = LocalDateTime.now(),
 
     @Column
-    val goalCount : Int = 0,
+    var goalCount : Int = 0,
 
     @Column
     val completedCount: Int = 0,
 
     @Column
-    val isDeleted: Boolean = false,
+    var isDeleted: Boolean = false,
 
     @Column
-    val isSuccess: Boolean = false,
+    var isSuccess: Boolean = false,
 
     @Column
     val createdAt: LocalDateTime = LocalDateTime.now(),
 
     @Column
-    val updatedAt: LocalDateTime = LocalDateTime.now()
+    var updatedAt: LocalDateTime = LocalDateTime.now()
 
 ) {
 
@@ -78,6 +78,11 @@ class RoutineEntity (
             createdAt = this.createdAt,
             updatedAt = this.updatedAt
         )
+    }
+
+    fun delete() {
+        this.isDeleted = true
+        this.updatedAt = LocalDateTime.now()
     }
 }
 
