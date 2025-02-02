@@ -1,6 +1,5 @@
 package com.example.toygry.routinmoa.user.domain.entity
 
-import com.example.toygry.routinmoa.user.adapter.out.persistence.entity.UserEntity
 import java.time.LocalDateTime
 
 class User(
