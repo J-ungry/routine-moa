@@ -1,7 +1,5 @@
 package com.example.toygry.routinmoa.routine.domain.entity
 
-import com.example.toygry.routinmoa.routine.adapter.out.persistence.entity.RoutineEntity
-import com.example.toygry.routinmoa.user.adapter.out.persistence.entity.UserEntity
 import java.time.LocalDateTime
 
 class Routine(
