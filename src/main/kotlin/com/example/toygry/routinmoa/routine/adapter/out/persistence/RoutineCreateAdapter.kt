@@ -8,7 +8,7 @@ import com.example.toygry.routinmoa.user.adapter.out.persistence.repository.User
 import org.springframework.stereotype.Component
 
 @Component
-class CreateRoutineAdapter(
+class RoutineCreateAdapter(
     val routineRepository: RoutineRepository,
     val userRepository: UserRepository
     ): CreateRoutinePort {
