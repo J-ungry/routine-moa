@@ -7,10 +7,10 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "routines")
-class RoutineEntity (
+class RoutineEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id : Long = 0,
+    val id: Long = 0,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -26,10 +26,10 @@ class RoutineEntity (
     var endDate: LocalDateTime = LocalDateTime.now(),
 
     @Column
-    var goalCount : Int = 0,
+    var goalCount: Int = 0,
 
     @Column
-    val completedCount: Int = 0,
+    var completedCount: Int = 0,
 
     @Column
     var isDeleted: Boolean = false,
@@ -41,7 +41,10 @@ class RoutineEntity (
     val createdAt: LocalDateTime = LocalDateTime.now(),
 
     @Column
-    var updatedAt: LocalDateTime = LocalDateTime.now()
+    var updatedAt: LocalDateTime = LocalDateTime.now(),
+
+    @Column
+    var lastComplete: LocalDateTime? = null
 
 ) {
 
@@ -59,7 +62,8 @@ class RoutineEntity (
                 isDeleted = routine.isDeleted,
                 isSuccess = routine.isSuccess,
                 createdAt = routine.createdAt,
-                updatedAt = routine.updatedAt
+                updatedAt = routine.updatedAt,
+                lastComplete = routine.lastComplete,
             )
         }
     }
@@ -76,13 +80,29 @@ class RoutineEntity (
             isDeleted = this.isDeleted,
             isSuccess = this.isSuccess,
             createdAt = this.createdAt,
-            updatedAt = this.updatedAt
+            updatedAt = this.updatedAt,
+            lastComplete = this.lastComplete
         )
     }
 
     fun delete() {
         this.isDeleted = true
         this.updatedAt = LocalDateTime.now()
+    }
+
+    fun complete() {
+        if (completedCount < goalCount) {
+            completedCount += 1
+            updatedAt = LocalDateTime.now()
+            lastComplete = LocalDateTime.now()
+        }
+        checkSuccess()
+    }
+    private fun checkSuccess() {
+        if (completedCount >= goalCount) {
+            isSuccess = true
+            updatedAt = LocalDateTime.now()
+        }
     }
 }
 

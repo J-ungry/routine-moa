@@ -13,7 +13,8 @@ class Routine(
     val isDeleted: Boolean,
     val isSuccess: Boolean,
     val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime
+    val updatedAt: LocalDateTime,
+    val lastComplete: LocalDateTime?,
     ) {
 
     companion object {
@@ -35,7 +36,8 @@ class Routine(
                 false,
                 false,
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                null
             )
         }
     }
