@@ -2,10 +2,7 @@ package com.example.toygry.routinmoa.user.adapter.`in`
 
 import com.example.toygry.routinmoa.user.application.port.`in`.UserUseCase
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 
 @RestController
@@ -20,11 +17,6 @@ class UserController(
         val userResponse = UserResponse(user.id, user.email, user.name, user.level, user.points, user.createdAt)
         return ResponseEntity.ok(userResponse)
     }
-
-//    @PostMapping
-//    fun signUp(@RequestBody request: UserRequest): ResponseEntity<UserResponse> {
-//    }
-
 
 }
 
