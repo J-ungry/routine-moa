@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 class User(
     val id: Long,
     val email: String,
-    val name : String,
+    var name : String,
     val level : Int,
     val points: Int,
     val createdAt: LocalDateTime
