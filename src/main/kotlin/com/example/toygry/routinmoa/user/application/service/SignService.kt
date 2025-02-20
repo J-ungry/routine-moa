@@ -16,4 +16,8 @@ class SignService(
     override fun signUp(email: String): SignResult {
         return signPort.signUp(email)
     }
+
+    override fun sendEmail(email: String, type: String): SignResult {
+        return signPort.sendEmail(email, type)
+    }
 }
