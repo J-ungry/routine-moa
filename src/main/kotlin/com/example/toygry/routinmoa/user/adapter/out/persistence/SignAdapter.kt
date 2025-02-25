@@ -51,6 +51,20 @@ class SignAdapter(
         return SignResult(true, "이메일 전송 완료")
     }
 
+    @Transactional
+    override fun setName(email: String, name: String): SignResult {
+        // email 가져와서
+        val userEntity = userRepository.findByEmail(email)
+
+        if (userEntity != null) {
+            userEntity.changeName(name)
+        } else {
+            throw IllegalArgumentException("User not found")
+        }
+
+        return SignResult(true, "이름 설정 완료")
+    }
+
     private fun generateCode(): String {
         return (100000..999999).random().toString() // 6자리 숫자 랜덤 생성
     }

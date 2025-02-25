@@ -16,7 +16,7 @@ class UserEntity(
     val email: String = "",
 
     @Column(nullable = false)
-    val name: String = "",
+    var name: String = "",
 
     @Column(nullable = false)
     var level: Int = 1, // 기본 레벨 1
@@ -40,5 +40,9 @@ class UserEntity(
                 createdAt = user.createdAt
             )
         }
+    }
+
+    fun changeName(name: String) {
+        this.name = name
     }
 }

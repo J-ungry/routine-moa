@@ -4,3 +4,7 @@ spring:
     username: ?????
     password: ?????
     driver-class-name: org.postgresql.Driver
+jwt:
+  secret: ?????
+  accessTokenExpiration: 3600000
+  refreshTokenExpiration: 1209600000
