@@ -1,6 +1,6 @@
 package com.example.toygry.routinmoa.token
 
-import com.example.toygry.routinmoa.user.domain.entity.User
+import com.example.toygry.routinmoa.token.domain.TokenPayload
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
