@@ -1,4 +1,4 @@
-package com.example.toygry.routinmoa.token
+package com.example.toygry.routinmoa.token.domain
 
 data class TokenPayload (
     val id: Long,
