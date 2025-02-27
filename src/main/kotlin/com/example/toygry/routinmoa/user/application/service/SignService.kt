@@ -23,11 +23,7 @@ class SignService(
 
     override fun verifyCode(email: String, code: String): SignResult {
         // 코드가 맞는지 확인하기
-        val verifyCodeResult = signPort.verifyCode(email, code)
-        if (verifyCodeResult) {
-            // 만약 코드가 맞다면 토큰 생성 및 헤더에 싣기
-        }
-
+        return signPort.verifyCode(email, code)
     }
 
     override fun setName(email: String, name: String): SignResult {

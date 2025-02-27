@@ -1,6 +1,7 @@
 package com.example.toygry.routinmoa.user.adapter.`in`
 
 import com.example.toygry.routinmoa.user.application.port.`in`.SignUseCase
+import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -37,8 +38,10 @@ class SignController(
     @PostMapping("/verify")
     fun verifyCode(@RequestBody request: VerifyCodeRequest): ResponseEntity<SignResponse> {
         val result = signUseCase.verifyCode(request.email, request.code)
-        val response = SignResponse(result.status, result.message)
-        return ResponseEntity.ok(response)
+        val response = SignResponse(result.status, result.message, result.token)
+        return ResponseEntity.ok()
+            .headers(response.token)
+            .body(response)
     }
 
     // setName (이름 설정하기)
@@ -51,7 +54,7 @@ class SignController(
 }
 
 data class EmailRequest(val email: String)
-data class SignResponse(val status: Boolean, val message: String)
+data class SignResponse(val status: Boolean, val message: String, val token: HttpHeaders? = null)
 data class SendEmailRequest(val email: String, val type: String) // TODO enum 으로 변경
 data class SetNameRequest(val email: String, val name: String)
 data class VerifyCodeRequest(val email: String, val code: String)

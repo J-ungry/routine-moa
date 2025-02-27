@@ -1,4 +1,4 @@
-package com.example.toygry.routinmoa.token
+package com.example.toygry.routinmoa.token.domain
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration

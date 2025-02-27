@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface EmailVerificationRepository: JpaRepository<EmailVerificationEntity, Long> {
     fun deleteByEmail(email: String)
+    fun findTopByEmailOrderByCreatedAtDesc(email: String): EmailVerificationEntity?
 }
