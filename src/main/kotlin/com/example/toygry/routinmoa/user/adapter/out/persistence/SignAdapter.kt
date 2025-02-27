@@ -1,5 +1,6 @@
 package com.example.toygry.routinmoa.user.adapter.out.persistence
 
+import com.example.toygry.routinmoa.token.application.port.TokenPort
 import com.example.toygry.routinmoa.user.adapter.out.persistence.entity.EmailVerificationEntity
 import com.example.toygry.routinmoa.user.adapter.out.persistence.repository.EmailVerificationRepository
 import com.example.toygry.routinmoa.user.adapter.out.persistence.repository.UserRepository
@@ -10,12 +11,15 @@ import jakarta.transaction.Transactional
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Component
+import java.time.Duration
+import java.time.LocalDateTime
 
 @Component
 class SignAdapter(
     val userRepository: UserRepository,
     val emailVerificationRepository: EmailVerificationRepository,
-    private val mailSender: JavaMailSender
+    private val mailSender: JavaMailSender,
+    private val tokenPort: TokenPort
 ): SignPort {
     override fun login(email: String): SignResult {
         val userEntity = userRepository.findByEmail(email)
@@ -89,5 +93,26 @@ class SignAdapter(
         )
 
         mailSender.send(message)
+    }
+
+    override fun verifyCode(email: String, code: String): SignResult {
+        // (1) 해당 이메일의 최신 인증 코드 조회
+        val latestVerification = emailVerificationRepository.findTopByEmailOrderByCreatedAtDesc(email)
+            ?: throw IllegalArgumentException("email not found")
+
+        // code 정상인지, 10분 이상 지나지 않았는지 check
+        if (latestVerification.code != code) {
+            throw IllegalArgumentException("Invalid verification code")
+        }
+
+        if (Duration.between(latestVerification.createdAt, LocalDateTime.now()).toMinutes() > 10) {
+            throw IllegalArgumentException("Verification code has expired.")
+        }
+
+        val user = userRepository.findByEmail(email) ?: throw IllegalArgumentException("User not found")
+
+        val token = tokenPort.generateToken(user.id, user.email, user.name)
+
+        return SignResult(true, "Verification successful", token)
     }
 }

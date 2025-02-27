@@ -1,9 +1,11 @@
-package com.example.toygry.routinmoa.token
+package com.example.toygry.routinmoa.token.infrastructure
 
+import com.example.toygry.routinmoa.token.domain.JwtProperties
 import com.example.toygry.routinmoa.token.domain.TokenPayload
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
+import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
 import java.util.*
 import javax.crypto.SecretKey
@@ -15,8 +17,19 @@ class JwtTokenProvider(
 
     private val key: SecretKey = Keys.hmacShaKeyFor(jwtProperties.secret.toByteArray())
 
+    // token 한번에 발급하고 header 에 넣어주기
+    fun generateToken(id: Long, email: String, name: String): HttpHeaders {
+        val accessToken = generateAccessToken(id,email,name)
+        val refreshToken = generateRefreshToken(id)
+
+        return HttpHeaders().apply {
+            add("Authorization", "Bearer $accessToken")
+            add("Refresh-Token", "Bearer $refreshToken")
+        }
+    }
+
     // jwt 발급
-    fun generateAccessToken(id: Long, email: String, name: String): String {
+    private fun generateAccessToken(id: Long, email: String, name: String): String {
         return Jwts.builder()
             .setSubject(email)
             .claim("id", id)
@@ -28,7 +41,7 @@ class JwtTokenProvider(
     }
 
     // refreshToken 발급
-    fun generateRefreshToken(id: Long): String {
+    private fun generateRefreshToken(id: Long): String {
         return Jwts.builder()
             .setSubject(id.toString())
             .setIssuedAt(Date())
