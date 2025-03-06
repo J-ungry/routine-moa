@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @ConfigurationProperties(prefix = "jwt")
 class JwtProperties {
-    val secret = ""
+    val secret = "thisisaverysecuresecretkeythatismorethan32byteslong"
     val accessTokenExpiration = 3600000
     val refreshTokenExpiration = 1209600000
 
