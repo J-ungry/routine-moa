@@ -21,21 +21,13 @@ class SignAdapter(
     private val mailSender: JavaMailSender,
     private val tokenPort: TokenPort
 ): SignPort {
-    override fun login(email: String): SignResult {
+
+    override fun sign(email: String): SignResult {
         val userEntity = userRepository.findByEmail(email)
         if (userEntity != null) {
-            return SignResult(true, "로그인")
+            return SignResult(status = true, message = "로그인", type="login")
         } else {
-            return SignResult(false, "존재하지 않는 유저입니다")
-        }
-    }
-
-    override fun signUp(email: String): SignResult {
-        val userEntity = userRepository.findByEmail(email)
-        if (userEntity == null) {
-            return SignResult(true, "회원가입")
-        } else {
-            return SignResult(false, "이미 존재하는 유저입니다")
+            return SignResult(status = true, message = "회원가입", type="signUp")
         }
     }
 
@@ -52,7 +44,7 @@ class SignAdapter(
 
         sendVerificationEmail(email,newCode,type)
 
-        return SignResult(true, "이메일 전송 완료")
+        return SignResult(true, "이메일 전송 완료",type = type)
     }
 
     @Transactional
@@ -69,6 +61,7 @@ class SignAdapter(
         return SignResult(true, "이름 설정 완료")
     }
 
+
     private fun generateCode(): String {
         return (100000..999999).random().toString() // 6자리 숫자 랜덤 생성
     }
@@ -78,7 +71,11 @@ class SignAdapter(
         val helper = MimeMessageHelper(message, true)
 
         helper.setTo(email)
-        helper.setSubject("Your Verification Code")
+        if (type.equals("login")) {
+            helper.setSubject("Routine Moa Verification Code")
+        } else if (type.equals("signUp")) {
+            helper.setSubject("Routine Moa Sign up Code")
+        }
         helper.setText(
             """
             <html>
@@ -92,10 +89,11 @@ class SignAdapter(
             true
         )
 
+
         mailSender.send(message)
     }
 
-    override fun verifyCode(email: String, code: String): SignResult {
+    override fun verifyCode(email: String, code: String, type: String): SignResult {
         // (1) 해당 이메일의 최신 인증 코드 조회
         val latestVerification = emailVerificationRepository.findTopByEmailOrderByCreatedAtDesc(email)
             ?: throw IllegalArgumentException("email not found")
@@ -113,6 +111,6 @@ class SignAdapter(
 
         val token = tokenPort.generateToken(user.id, user.email, user.name)
 
-        return SignResult(true, "Verification successful", token)
+        return SignResult(true, "Verification successful", token, type)
     }
 }
